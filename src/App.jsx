@@ -1,17 +1,16 @@
 import { useState, useMemo, useEffect } from 'react'
-import { prompts, platforms, categories, sortOptions } from './data/prompts'
+import { prompts, platforms, categories } from './data/prompts'
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState('')
   const [selectedPlatform, setSelectedPlatform] = useState('all')
   const [selectedCategory, setSelectedCategory] = useState('all')
-  const [sortBy, setSortBy] = useState('hot')
   const [selectedPrompt, setSelectedPrompt] = useState(null)
   const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem('prompthub-favorites')
     return saved ? JSON.parse(saved) : []
   })
   const [showFavorites, setShowFavorites] = useState(false)
+  const [copiedId, setCopiedId] = useState(null)
 
   useEffect(() => {
     localStorage.setItem('prompthub-favorites', JSON.stringify(favorites))
@@ -26,18 +25,17 @@ function App() {
     )
   }
 
+  const handleCopy = (e, content, id) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(content)
+    setCopiedId(id)
+    setTimeout(() => setCopiedId(null), 2000)
+  }
+
   const filteredPrompts = useMemo(() => {
     let result = showFavorites 
       ? prompts.filter(p => favorites.includes(p.id))
       : prompts
-
-    if (!showFavorites && searchQuery) {
-      result = result.filter(p => 
-        p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
-      )
-    }
 
     if (!showFavorites && selectedPlatform !== 'all') {
       result = result.filter(p => p.platform === selectedPlatform)
@@ -47,141 +45,160 @@ function App() {
       result = result.filter(p => p.category === selectedCategory)
     }
 
-    switch (sortBy) {
-      case 'hot':
-        result = [...result].sort((a, b) => b.salesCount - a.salesCount)
-        break
-      case 'newest':
-        result = [...result].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        break
-      case 'rating':
-        result = [...result].sort((a, b) => b.rating - a.rating)
-        break
-      case 'price-low':
-        result = [...result].sort((a, b) => a.price - b.price)
-        break
-      case 'price-high':
-        result = [...result].sort((a, b) => b.price - a.price)
-        break
-    }
-
     return result
-  }, [searchQuery, selectedPlatform, selectedCategory, sortBy, showFavorites, favorites])
+  }, [selectedPlatform, selectedCategory, showFavorites, favorites])
+
+  // Count by platform
+  const platformCounts = useMemo(() => {
+    const counts = {}
+    prompts.forEach(p => {
+      counts[p.platform] = (counts[p.platform] || 0) + 1
+    })
+    return counts
+  }, [])
+
+  // Count by category
+  const categoryCounts = useMemo(() => {
+    const counts = {}
+    prompts.forEach(p => {
+      counts[p.category] = (counts[p.category] || 0) + 1
+    })
+    return counts
+  }, [])
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAFAFA' }}>
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b" style={{ borderColor: '#E4E4E7' }}>
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="text-lg font-semibold" style={{ color: '#18181B' }}>PromptHub</span>
-              <span className="text-sm hidden md:inline" style={{ color: '#A1A1AA' }}>AI提示词模板</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="搜索模板..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-40 md:w-64 h-11 rounded-full px-4 pl-10 text-sm"
-                  style={{ backgroundColor: '#F4F4F5', color: '#18181B' }}
-                />
-                <span className="absolute left-4 top-1/2 -translate-y-1/2" style={{ color: '#A1A1AA' }}>🔍</span>
-              </div>
-              <button 
-                onClick={() => setShowFavorites(!showFavorites)}
-                className="h-11 px-4 rounded-full text-sm font-medium transition-colors"
-                style={{
-                  backgroundColor: showFavorites ? '#18181B' : '#F4F4F5',
-                  color: showFavorites ? '#FFFFFF' : '#71717A'
-                }}
-              >
-                ♥ 收藏 ({favorites.length})
-              </button>
-            </div>
+      <header className="h-14 border-b flex items-center px-4 fixed top-0 left-0 right-0 bg-white z-30">
+        <div className="flex items-center gap-6 w-full max-w-5xl mx-auto">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">💡</span>
+            <span className="font-semibold text-gray-900">PromptHub</span>
           </div>
+          
+          <div className="flex-1 max-w-md">
+            <input
+              type="text"
+              placeholder="搜索提示词..."
+              className="w-full h-9 px-4 rounded-lg text-sm bg-gray-100 border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <button 
+            onClick={() => setShowFavorites(!showFavorites)}
+            className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${
+              showFavorites 
+                ? 'bg-gray-900 text-white' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            我的收藏 {favorites.length}
+          </button>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-6">
-        {/* Platform Filter */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-          {platforms.map(p => (
-            <button
-              key={p.key}
-              onClick={() => setSelectedPlatform(p.key)}
-              className="px-4 py-2 rounded-lg text-sm whitespace-nowrap transition-all"
-              style={{
-                backgroundColor: selectedPlatform === p.key ? '#18181B' : '#FFFFFF',
-                color: selectedPlatform === p.key ? '#FFFFFF' : '#71717A',
-                border: selectedPlatform === p.key ? 'none' : '1px solid #E4E4E7'
-              }}
-            >
-              {p.key !== 'all' && <span className="mr-1">{getPlatformEmoji(p.key)}</span>}
-              {p.name}
-            </button>
-          ))}
-        </div>
+      {/* Main Layout */}
+      <div className="pt-14 flex">
+        {/* Left Sidebar */}
+        <aside className="w-52 border-r fixed left-0 top-14 bottom-0 overflow-y-auto bg-white">
+          <div className="p-4">
+            {/* Platform */}
+            <div className="mb-6">
+              <h3 className="text-xs font-medium text-gray-400 uppercase mb-2">平台</h3>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setSelectedPlatform('all')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between ${
+                    selectedPlatform === 'all'
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <span>全部</span>
+                  <span className="text-xs opacity-60">{prompts.length}</span>
+                </button>
+                {platforms.filter(p => p.key !== 'all').map(p => (
+                  <button
+                    key={p.key}
+                    onClick={() => setSelectedPlatform(p.key)}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between ${
+                      selectedPlatform === p.key
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span>{p.name}</span>
+                    <span className="text-xs opacity-60">{platformCounts[p.key] || 0}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
 
-        {/* Category + Sort */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex gap-2 overflow-x-auto pb-2" style={{ scrollbarWidth: 'none' }}>
-            {categories.map(c => (
-              <button
-                key={c.key}
-                onClick={() => setSelectedCategory(c.key)}
-                className="px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition-colors"
-                style={{
-                  backgroundColor: selectedCategory === c.key ? '#18181B' : 'transparent',
-                  color: selectedCategory === c.key ? '#FFFFFF' : '#71717A'
-                }}
-              >
-                {c.name}
-              </button>
-            ))}
+            {/* Category */}
+            <div>
+              <h3 className="text-xs font-medium text-gray-400 uppercase mb-2">分类</h3>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setSelectedCategory('all')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between ${
+                    selectedCategory === 'all'
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  <span>全部</span>
+                  <span className="text-xs opacity-60">{prompts.length}</span>
+                </button>
+                {categories.filter(c => c.key !== 'all').map(c => (
+                  <button
+                    key={c.key}
+                    onClick={() => setSelectedCategory(c.key)}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between ${
+                      selectedCategory === c.key
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span>{c.name}</span>
+                    <span className="text-xs opacity-60">{categoryCounts[c.key] || 0}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="h-10 px-3 rounded-lg text-sm"
-            style={{ 
-              backgroundColor: '#FFFFFF', 
-              border: '1px solid #E4E4E7',
-              color: '#71717A'
-            }}
-          >
-            {sortOptions.map(o => (
-              <option key={o.key} value={o.key}>{o.name}</option>
-            ))}
-          </select>
-        </div>
+        </aside>
 
-        {/* Results Count */}
-        <div className="text-sm mb-4" style={{ color: '#71717A' }}>
-          {showFavorites ? '收藏' : '全部'} · {filteredPrompts.length} 个模板
-        </div>
+        {/* Content */}
+        <main className="flex-1 ml-52">
+          <div className="p-6">
+            {/* Results count */}
+            <div className="text-sm text-gray-400 mb-4">
+              {showFavorites ? '我的收藏' : '全部'} · {filteredPrompts.length} 个提示词
+            </div>
 
-        {/* Grid */}
-        {filteredPrompts.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {filteredPrompts.map(prompt => (
-              <PromptCard 
-                key={prompt.id} 
-                prompt={prompt} 
-                isFavorite={favorites.includes(prompt.id)}
-                onToggleFavorite={(e) => toggleFavorite(e, prompt.id)}
-                onClick={() => setSelectedPrompt(prompt)}
-              />
-            ))}
+            {/* List */}
+            {filteredPrompts.length > 0 ? (
+              <div className="space-y-3">
+                {filteredPrompts.map(prompt => (
+                  <PromptItem 
+                    key={prompt.id} 
+                    prompt={prompt} 
+                    isFavorite={favorites.includes(prompt.id)}
+                    onToggleFavorite={(e) => toggleFavorite(e, prompt.id)}
+                    onCopy={(e) => handleCopy(e, prompt.content, prompt.id)}
+                    onClick={() => setSelectedPrompt(prompt)}
+                    copied={copiedId === prompt.id}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20 text-gray-400">
+                {showFavorites ? '暂无收藏' : '无匹配结果'}
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="text-center py-20" style={{ color: '#A1A1AA' }}>
-            {showFavorites ? '暂无收藏' : '无匹配结果'}
-          </div>
-        )}
-      </main>
+        </main>
+      </div>
 
       {/* Modal */}
       {selectedPrompt && (
@@ -189,307 +206,178 @@ function App() {
           prompt={selectedPrompt} 
           isFavorite={favorites.includes(selectedPrompt.id)}
           onToggleFavorite={(e) => toggleFavorite(e, selectedPrompt.id)}
+          onCopy={(e) => handleCopy(e, selectedPrompt.content, selectedPrompt.id)}
+          copied={copiedId === selectedPrompt.id}
           onClose={() => setSelectedPrompt(null)} 
         />
       )}
-
-      {/* Footer */}
-      <footer className="border-t mt-16 py-8 text-center" style={{ borderColor: '#E4E4E7' }}>
-        <p className="text-sm" style={{ color: '#A1A1AA' }}>PromptHub · AI提示词模板市场</p>
-      </footer>
     </div>
   )
 }
 
-function getPlatformEmoji(platform) {
-  const emojis = {
-    'ChatGPT': '💬',
-    'Claude': '🤖',
-    'Midjourney': '🎨',
-    'Stable Diffusion': '🎭',
-    'DALL-E': '🖼️',
-    'Gemini': '✨',
-  }
-  return emojis[platform] || ''
-}
-
-function PromptCard({ prompt, isFavorite, onToggleFavorite, onClick }) {
+function PromptItem({ prompt, isFavorite, onToggleFavorite, onCopy, onClick, copied }) {
   return (
     <div 
-      className="bg-white rounded-xl overflow-hidden cursor-pointer transition-shadow hover:shadow-md"
-      style={{ border: '1px solid #E4E4E7' }}
+      className="border rounded-lg p-4 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer bg-white"
       onClick={onClick}
     >
-      {/* Cover */}
-      <div 
-        className="aspect-video flex items-center justify-center text-4xl"
-        style={{ backgroundColor: '#F4F4F5' }}
-      >
-        {prompt.coverImage}
-      </div>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          {/* Title */}
+          <h3 className="font-medium text-gray-900 mb-1">{prompt.title}</h3>
+          
+          {/* Tags */}
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+              {prompt.platform}
+            </span>
+            <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+              {prompt.category}
+            </span>
+            {prompt.tags.slice(0, 3).map(tag => (
+              <span key={tag} className="text-xs px-2 py-0.5 rounded bg-blue-50 text-blue-600">
+                #{tag}
+              </span>
+            ))}
+          </div>
 
-      {/* Content */}
-      <div className="p-4">
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="font-medium line-clamp-2" style={{ color: '#18181B', fontSize: '15px' }}>
-            {prompt.title}
-          </h3>
+          {/* Description */}
+          <p className="text-sm text-gray-500 line-clamp-1">{prompt.description}</p>
+
+          {/* Meta */}
+          <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+            <span>★ {prompt.rating}</span>
+            <span>·</span>
+            <span>已用 {prompt.salesCount}</span>
+            {prompt.isHot && (
+              <>
+                <span>·</span>
+                <span className="text-orange-500">热门</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-2 flex-shrink-0">
           <button
             onClick={onToggleFavorite}
-            className="flex-shrink-0 text-lg transition-colors"
-            style={{ color: isFavorite ? '#EF4444' : '#D4D4D8' }}
+            className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${
+              isFavorite 
+                ? 'text-red-500 bg-red-50' 
+                : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+            }`}
           >
             {isFavorite ? '♥' : '♡'}
           </button>
-        </div>
-
-        <p className="text-sm line-clamp-2 mb-3" style={{ color: '#71717A' }}>{prompt.description}</p>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xs px-2 py-0.5 rounded" style={{ backgroundColor: '#F4F4F5', color: '#71717A' }}>
-              {prompt.platform}
-            </span>
-            <span className="text-xs" style={{ color: '#A1A1AA' }}>{prompt.category}</span>
-          </div>
-          {prompt.price === 0 ? (
-            <span className="text-sm font-medium" style={{ color: '#10B981' }}>免费</span>
-          ) : (
-            <span className="text-sm font-medium" style={{ color: '#6366F1' }}>¥{prompt.price}</span>
-          )}
-        </div>
-
-        <div className="flex items-center gap-1 mt-2 text-xs" style={{ color: '#A1A1AA' }}>
-          <span style={{ color: '#F59E0B' }}>★</span>
-          <span>{prompt.rating}</span>
-          <span>·</span>
-          <span>已售 {prompt.salesCount}</span>
-          {prompt.isHot && (
-            <>
-              <span>·</span>
-              <span style={{ color: '#F59E0B' }}>热门</span>
-            </>
-          )}
+          <button
+            onClick={onCopy}
+            className={`h-9 px-4 rounded-lg flex items-center justify-center text-sm font-medium transition-colors ${
+              copied
+                ? 'bg-green-500 text-white'
+                : 'bg-gray-900 text-white hover:bg-gray-800'
+            }`}
+          >
+            {copied ? '已复制' : '复制'}
+          </button>
         </div>
       </div>
     </div>
   )
 }
 
-function PromptModal({ prompt, isFavorite, onToggleFavorite, onClose }) {
-  const [copied, setCopied] = useState(false)
-  const [showPayment, setShowPayment] = useState(false)
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(prompt.content)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
+function PromptModal({ prompt, isFavorite, onToggleFavorite, onCopy, copied, onClose }) {
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-2xl max-w-xl w-full max-h-[90vh] overflow-hidden"
+        className="bg-white rounded-xl max-w-2xl w-full max-h-[85vh] overflow-hidden flex flex-col"
         onClick={e => e.stopPropagation()}
       >
-        {showPayment ? (
-          <PaymentView 
-            prompt={prompt} 
-            onBack={() => setShowPayment(false)} 
-            onCopy={handleCopy} 
-            copied={copied} 
-          />
-        ) : (
-          <>
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b" style={{ borderColor: '#E4E4E7' }}>
-              <div className="flex items-center gap-3">
-                <span className="text-3xl">{prompt.coverImage}</span>
-                <div>
-                  <h2 className="font-semibold" style={{ color: '#18181B' }}>{prompt.title}</h2>
-                  <div className="text-sm" style={{ color: '#71717A' }}>
-                    ★ {prompt.rating} · 已售 {prompt.salesCount}
-                  </div>
-                </div>
-              </div>
-              <button onClick={onClose} style={{ color: '#71717A' }}>✕</button>
-            </div>
-
-            {/* Content */}
-            <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(90vh - 180px)' }}>
-              {/* Description */}
-              <div className="mb-6">
-                <h3 className="text-sm font-medium mb-2" style={{ color: '#71717A' }}>描述</h3>
-                <p style={{ color: '#3F3F46' }}>{prompt.description}</p>
-              </div>
-
-              {/* Prompt */}
-              <div className="mb-6">
-                <h3 className="text-sm font-medium mb-2" style={{ color: '#71717A' }}>提示词</h3>
-                <div 
-                  className="rounded-lg p-4 text-sm whitespace-pre-wrap overflow-y-auto"
-                  style={{ 
-                    backgroundColor: '#F4F4F5', 
-                    color: '#3F3F46',
-                    maxHeight: '200px',
-                    fontFamily: 'monospace'
-                  }}
-                >
-                  {prompt.content}
-                </div>
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                <span className="px-2 py-1 rounded text-xs" style={{ backgroundColor: '#F4F4F5', color: '#71717A' }}>
-                  {prompt.platform}
-                </span>
-                <span className="px-2 py-1 rounded text-xs" style={{ backgroundColor: '#F4F4F5', color: '#71717A' }}>
-                  {prompt.category}
-                </span>
-                {prompt.tags.map(tag => (
-                  <span key={tag} className="px-2 py-1 rounded text-xs" style={{ backgroundColor: '#F4F4F5', color: '#A1A1AA' }}>
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* Creator */}
-              <div className="flex items-center justify-between py-4 border-t" style={{ borderColor: '#E4E4E7' }}>
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{prompt.creator.avatar}</span>
-                  <div>
-                    <div className="font-medium" style={{ color: '#18181B' }}>{prompt.creator.name}</div>
-                    <div className="text-xs" style={{ color: '#A1A1AA' }}>已售 {prompt.creator.sales}</div>
-                  </div>
-                </div>
-                <button 
-                  onClick={onToggleFavorite}
-                  className="px-4 py-2 rounded-lg text-sm transition-colors"
-                  style={{ 
-                    backgroundColor: isFavorite ? '#FEF2F2' : '#F4F4F5', 
-                    color: isFavorite ? '#EF4444' : '#71717A'
-                  }}
-                >
-                  {isFavorite ? '♥ 已收藏' : '♡ 收藏'}
-                </button>
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">{prompt.coverImage}</span>
+            <div>
+              <h2 className="font-semibold text-gray-900">{prompt.title}</h2>
+              <div className="text-sm text-gray-400">
+                ★ {prompt.rating} · 已用 {prompt.salesCount}
               </div>
             </div>
-
-            {/* Footer */}
-            <div className="p-4 border-t flex gap-3" style={{ borderColor: '#E4E4E7' }}>
-              {prompt.price === 0 ? (
-                <button
-                  onClick={handleCopy}
-                  className="flex-1 py-3 rounded-xl font-medium transition-colors"
-                  style={{ 
-                    backgroundColor: copied ? '#10B981' : '#18181B',
-                    color: '#FFFFFF'
-                  }}
-                >
-                  {copied ? '已复制' : '复制提示词'}
-                </button>
-              ) : (
-                <>
-                  <button
-                    onClick={handleCopy}
-                    className="flex-1 py-3 rounded-xl font-medium"
-                    style={{ backgroundColor: '#F4F4F5', color: '#71717A' }}
-                  >
-                    预览
-                  </button>
-                  <button
-                    onClick={() => setShowPayment(true)}
-                    className="flex-1 py-3 rounded-xl font-medium"
-                    style={{ backgroundColor: '#18181B', color: '#FFFFFF' }}
-                  >
-                    ¥{prompt.price} 购买
-                  </button>
-                </>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function PaymentView({ prompt, onBack, onCopy, copied }) {
-  const [step, setStep] = useState('qrcode')
-
-  const handlePay = () => {
-    setStep('success')
-  }
-
-  return (
-    <div className="p-6">
-      {step === 'qrcode' ? (
-        <>
-          <div className="flex items-center gap-3 mb-6">
-            <button onClick={onBack} style={{ color: '#71717A' }}>←</button>
-            <span className="font-medium" style={{ color: '#18181B' }}>完成支付</span>
           </div>
-
-          <div className="text-center mb-6">
-            <div 
-              className="w-48 h-48 mx-auto rounded-xl flex items-center justify-center mb-4"
-              style={{ backgroundColor: '#F4F4F5' }}
-            >
-              <span className="text-6xl" style={{ color: '#D4D4D8' }}>⊞</span>
-            </div>
-            <div className="text-2xl font-bold" style={{ color: '#18181B' }}>¥{prompt.price}</div>
-          </div>
-
-          <div className="text-center text-sm mb-6" style={{ color: '#71717A' }}>
-            请使用微信或支付宝扫描支付
-          </div>
-
-          <button
-            onClick={handlePay}
-            className="w-full py-3 rounded-xl font-medium"
-            style={{ backgroundColor: '#18181B', color: '#FFFFFF' }}
+          <button 
+            onClick={onClose}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100"
           >
-            已完成支付
+            ✕
           </button>
-        </>
-      ) : (
-        <>
-          <div className="text-center py-8">
-            <div 
-              className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: '#10B981' }}
-            >
-              <span className="text-white text-2xl">✓</span>
-            </div>
-            <h3 className="text-xl font-bold mb-2" style={{ color: '#18181B' }}>支付成功</h3>
-            <p className="mb-6" style={{ color: '#71717A' }}>现在可以获取提示词了</p>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-4">
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+              {prompt.platform}
+            </span>
+            <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">
+              {prompt.category}
+            </span>
+            {prompt.tags.map(tag => (
+              <span key={tag} className="text-xs px-2 py-0.5 rounded bg-blue-50 text-blue-600">
+                #{tag}
+              </span>
+            ))}
           </div>
 
+          {/* Description */}
+          <div className="mb-4">
+            <h3 className="text-sm font-medium text-gray-500 mb-1">描述</h3>
+            <p className="text-gray-700">{prompt.description}</p>
+          </div>
+
+          {/* Prompt Content */}
+          <div>
+            <h3 className="text-sm font-medium text-gray-500 mb-1">提示词</h3>
+            <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 whitespace-pre-wrap font-mono overflow-x-auto">
+              {prompt.content}
+            </div>
+          </div>
+
+          {/* Creator */}
+          <div className="flex items-center gap-3 mt-4 pt-4 border-t">
+            <span className="text-xl">{prompt.creator.avatar}</span>
+            <div>
+              <div className="font-medium text-gray-900 text-sm">{prompt.creator.name}</div>
+              <div className="text-xs text-gray-400">已售 {prompt.creator.sales}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 border-t flex gap-3">
+          <button
+            onClick={onToggleFavorite}
+            className={`px-4 py-2 rounded-lg text-sm ${
+              isFavorite 
+                ? 'bg-red-50 text-red-500' 
+                : 'bg-gray-100 text-gray-600'
+            }`}
+          >
+            {isFavorite ? '♥ 已收藏' : '♡ 收藏'}
+          </button>
           <button
             onClick={onCopy}
-            className="w-full py-3 rounded-xl font-medium mb-3 transition-colors"
-            style={{ 
-              backgroundColor: copied ? '#10B981' : '#18181B',
-              color: '#FFFFFF'
-            }}
+            className={`flex-1 py-2 rounded-lg text-sm font-medium text-white ${
+              copied ? 'bg-green-500' : 'bg-gray-900'
+            }`}
           >
             {copied ? '已复制到剪贴板' : '复制提示词'}
           </button>
-          
-          <button 
-            onClick={onBack}
-            className="w-full py-3 rounded-xl font-medium"
-            style={{ backgroundColor: '#F4F4F5', color: '#71717A' }}
-          >
-            返回
-          </button>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   )
 }
