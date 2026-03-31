@@ -18,13 +18,14 @@ export const prompts = [
 请直接输出邮件内容，不需要额外解释。`,
     platform: 'ChatGPT',
     category: '职场办公',
+    subCategory: '邮件',
     tags: ['邮件', '商务沟通', '职业化'],
     rating: 4.8,
-    ratingCount: 892,
-    salesCount: 15600,
-    creator: { name: '职场达人', avatar: '💼', sales: 12500 },
+    useCount: 15600,
+    creator: { name: '职场达人', avatar: '💼' },
     coverImage: '📧',
     isHot: true,
+    isUserShared: false,
   },
   {
     id: 'chatgpt-meeting-summary',
@@ -47,13 +48,14 @@ export const prompts = [
 5. 下次会议安排`,
     platform: 'ChatGPT',
     category: '职场办公',
+    subCategory: '会议',
     tags: ['会议', '效率工具', '文档整理'],
     rating: 4.9,
-    ratingCount: 1456,
-    salesCount: 23000,
-    creator: { name: '效率大师', avatar: '⚡', sales: 18900 },
+    useCount: 23000,
+    creator: { name: '效率大师', avatar: '⚡' },
     coverImage: '📝',
     isHot: true,
+    isUserShared: false,
   },
   {
     id: 'chatgpt-linkedin-post',
@@ -74,13 +76,14 @@ export const prompts = [
 - 添加一个引发讨论的问题`,
     platform: 'ChatGPT',
     category: '职场办公',
+    subCategory: '社交媒体',
     tags: ['LinkedIn', '内容营销', '个人品牌'],
     rating: 4.7,
-    ratingCount: 567,
-    salesCount: 8900,
-    creator: { name: '增长黑客', avatar: '🚀', sales: 7200 },
+    useCount: 8900,
+    creator: { name: '增长黑客', avatar: '🚀' },
     coverImage: '💼',
     isHot: false,
+    isUserShared: false,
   },
   {
     id: 'chatgpt-prd-generator',
@@ -103,13 +106,14 @@ export const prompts = [
 7. 排期建议`,
     platform: 'ChatGPT',
     category: '职场办公',
+    subCategory: '产品',
     tags: ['PRD', '产品经理', '文档生成'],
     rating: 4.6,
-    ratingCount: 324,
-    salesCount: 5600,
-    creator: { name: '产品老王', avatar: '📱', sales: 4800 },
+    useCount: 5600,
+    creator: { name: '产品老王', avatar: '📱' },
     coverImage: '📋',
     isHot: false,
+    isUserShared: false,
   },
   {
     id: 'chatgpt-presentation',
@@ -130,13 +134,138 @@ export const prompts = [
 5. 演讲过渡语示例`,
     platform: 'ChatGPT',
     category: '职场办公',
+    subCategory: '演示',
     tags: ['PPT', '演讲', '汇报'],
     rating: 4.7,
-    ratingCount: 456,
-    salesCount: 7800,
-    creator: { name: '演示专家', avatar: '📊', sales: 6200 },
+    useCount: 7800,
+    creator: { name: '演示专家', avatar: '📊' },
     coverImage: '📊',
     isHot: true,
+    isUserShared: false,
+  },
+  // ChatGPT 写作辅助
+  {
+    id: 'chatgpt-writing-assistant',
+    title: '写作助理',
+    description: '优化句子、文章的语法、清晰度和简洁度，提高可读性',
+    content: `As a writing improvement assistant, your task is to improve the spelling, grammar, clarity, concision, and overall readability of the text provided, while breaking down long sentences, reducing repetition, and providing suggestions for improvement. Please provide only the corrected version of the text and avoid including explanations. Please begin by editing the following text: [文章内容]`,
+    platform: 'ChatGPT',
+    category: '写作辅助',
+    subCategory: '文章/报告',
+    tags: ['写作', '语法', '润色'],
+    rating: 4.9,
+    useCount: 88000,
+    creator: { name: 'AI', avatar: '🤖' },
+    coverImage: '✍️',
+    isHot: true,
+    isUserShared: true,
+    sourceUrl: 'https://github.com/f/awesome-chatgpt-prompts',
+  },
+  {
+    id: 'chatgpt-xiaohongshu',
+    title: '小红书风格',
+    description: '将文本改写成类似小红书的 Emoji 风格',
+    content: `Please edit the following passage using the Emoji style, which is characterized by captivating headlines, the inclusion of emoticons in each paragraph, and the addition of relevant tags at the end. Be sure to maintain the original meaning of the text. Please begin by editing the following text: [小红书内容]`,
+    platform: 'ChatGPT',
+    category: '写作辅助',
+    subCategory: '文章/报告',
+    tags: ['小红书', 'emoji', '社交媒体'],
+    rating: 4.8,
+    useCount: 59000,
+    creator: { name: 'AI', avatar: '🤖' },
+    coverImage: '📕',
+    isHot: true,
+    isUserShared: true,
+    sourceUrl: 'https://github.com/f/awesome-chatgpt-prompts',
+  },
+  {
+    id: 'chatgpt-seo-article',
+    title: 'SEO友好文章',
+    description: '生成既符合搜索引擎又吸引读者的优质内容',
+    content: `你是一位SEO内容专家。请为以下主题撰写一篇SEO友好的文章。
+
+主题：{topic}
+目标关键词：{keywords}
+文章长度：{length}字
+目标读者：{audience}
+发布平台：{platform}
+
+要求：
+- 标题包含主关键词（25-30字）
+- SEO元描述（150-160字）
+- H1主标题 + H2/H3副标题
+- 关键词密度2-3%
+- 包含内部链接占位符
+- 图alt标签建议
+- 结尾CTA设计`,
+    platform: 'ChatGPT',
+    category: '写作辅助',
+    subCategory: '文章/报告',
+    tags: ['SEO', '内容营销', '文章写作'],
+    rating: 4.7,
+    useCount: 24000,
+    creator: { name: 'SEO专家', avatar: '🔍' },
+    coverImage: '📝',
+    isHot: true,
+    isUserShared: false,
+  },
+  {
+    id: 'chatgpt-video-script',
+    title: '短视频脚本创作',
+    description: '为抖音/B站等平台创作吸引人的短视频脚本',
+    content: `你是一位短视频内容策划专家。请为以下主题创作短视频脚本。
+
+平台：{platform}（抖音/小红书/B站）
+主题：{topic}
+目标受众：{audience}
+时长：{duration}秒
+风格：{style}（搞笑/干货/情感/测评）
+
+请输出完整脚本：
+1. 封面标题和字幕设计
+2. 开场钩子（前3秒）
+3. 正文结构（分镜+字幕+配音）
+4. 互动引导
+5. 背景音乐建议`,
+    platform: 'ChatGPT',
+    category: '写作辅助',
+    subCategory: '文章/报告',
+    tags: ['短视频', '脚本', '内容创作'],
+    rating: 4.8,
+    useCount: 24500,
+    creator: { name: '短视频达人', avatar: '🎬' },
+    coverImage: '📹',
+    isHot: true,
+    isUserShared: false,
+  },
+  {
+    id: 'chatgpt-product-desc',
+    title: '电商品台产品描述',
+    description: '生成淘宝/京东/亚马逊等平台的商品详情页文案',
+    content: `你是一位电商文案专家。请为以下产品撰写吸引买家的商品描述。
+
+平台：{platform}（淘宝/京东/亚马逊）
+产品名称：{product_name}
+核心卖点：{key_features}
+目标人群：{target_audience}
+价格带：{price_range}
+
+要求：
+- 主图视频脚本
+- 标题（含关键词，SEO优化）
+- 五点描述（USP形式）
+- 详情页文案
+- 买家秀引导语`,
+    platform: 'ChatGPT',
+    category: '写作辅助',
+    subCategory: '文章/报告',
+    tags: ['电商', '产品文案', '转化率优化'],
+    rating: 4.7,
+    useCount: 15600,
+    creator: { name: '转化率专家', avatar: '🛒' },
+    coverImage: '🛍️',
+    isHot: false,
+    isUserShared: false,
   },
   // ChatGPT 编程开发
   {
@@ -163,14 +292,15 @@ export const prompts = [
 - 具体问题描述
 - 修改建议代码（如果适用）`,
     platform: 'ChatGPT',
-    category: '编程开发',
+    category: 'IT/编程',
+    subCategory: '代码审查',
     tags: ['代码审查', '质量保证', '最佳实践'],
     rating: 4.8,
-    ratingCount: 1876,
-    salesCount: 28000,
-    creator: { name: '架构师小李', avatar: '🎨', sales: 22000 },
+    useCount: 28000,
+    creator: { name: '架构师小李', avatar: '🎨' },
     coverImage: '🔍',
     isHot: true,
+    isUserShared: false,
   },
   {
     id: 'chatgpt-bug-debug',
@@ -203,14 +333,15 @@ export const prompts = [
 2. 修复方案（包含修改的代码）
 3. 预防类似问题的建议`,
     platform: 'ChatGPT',
-    category: '编程开发',
+    category: 'IT/编程',
+    subCategory: '代码审查',
     tags: ['Bug修复', '调试', '问题解决'],
     rating: 4.9,
-    ratingCount: 2156,
-    salesCount: 35000,
-    creator: { name: 'Bug终结者', avatar: '🐛', sales: 29000 },
+    useCount: 35000,
+    creator: { name: 'Bug终结者', avatar: '🐛' },
     coverImage: '🔧',
     isHot: true,
+    isUserShared: false,
   },
   {
     id: 'chatgpt-api-design',
@@ -231,14 +362,15 @@ export const prompts = [
 
 遵循REST最佳实践。`,
     platform: 'ChatGPT',
-    category: '编程开发',
+    category: 'IT/编程',
+    subCategory: '代码审查',
     tags: ['API设计', 'REST', '后端开发'],
     rating: 4.7,
-    ratingCount: 678,
-    salesCount: 11200,
-    creator: { name: 'API大师', avatar: '🔗', sales: 9800 },
+    useCount: 11200,
+    creator: { name: 'API大师', avatar: '🔗' },
     coverImage: '📡',
     isHot: false,
+    isUserShared: false,
   },
   {
     id: 'chatgpt-sql-generator',
@@ -259,162 +391,33 @@ export const prompts = [
 3. 性能注意事项
 4. 索引建议（如适用）`,
     platform: 'ChatGPT',
-    category: '编程开发',
+    category: 'IT/编程',
+    subCategory: '代码审查',
     tags: ['SQL', '数据库', '查询优化'],
     rating: 4.8,
-    ratingCount: 1234,
-    salesCount: 19500,
-    creator: { name: '数据极客', avatar: '🗄️', sales: 15600 },
+    useCount: 19500,
+    creator: { name: '数据极客', avatar: '🗄️' },
     coverImage: '💾',
     isHot: false,
+    isUserShared: false,
   },
+  // AI 相关
   {
-    id: 'chatgpt-git-commit',
-    title: 'Git提交信息生成器',
-    description: '根据代码变更生成规范化的Git提交信息',
-    content: `你是一位代码质量管理专家。请根据以下变更生成规范的Git提交信息。
-
-变更类型：{type}（feat/fix/docs/style/refactor/test/chore）
-变更内容：
-{changes}
-
-请生成：
-1. 符合Conventional Commits规范的提交信息
-2. 详细的body描述（WHAT和WHY）
-3. Breaking Changes说明（如有）
-4. 关联的Issue编号（如有）
-
-格式示例：
-feat: add user login functionality
-
-implement OAuth2 login with Google provider
-- add google OAuth2 configuration
-- create login API endpoint
-- add token refresh mechanism
-
-Closes #123`,
+    id: 'chatgpt-midjourney-prompt',
+    title: 'Midjourney 提示生成器',
+    description: '通过为提供的图像描述填充详细且有创意的描述，激发Midjourney生成独特有趣的图像',
+    content: `I want you to act as a prompt generator for Midjourney's artificial intelligence program. Your job is to provide detailed and creative descriptions that will inspire unique and interesting images from the AI. Please ensure that all descriptions are in English. Keep in mind that the AI is capable of understanding a wide range of language and can interpret abstract concepts, so feel free to be as imaginative and descriptive as possible. For example, you could describe a scene from a futuristic city, or a surreal landscape filled with strange creatures. The more detailed and imaginative your description, the more interesting the resulting image will be. Here is your first prompt: [画面描述]`,
     platform: 'ChatGPT',
-    category: '编程开发',
-    tags: ['Git', '版本控制', '团队协作'],
-    rating: 4.6,
-    ratingCount: 567,
-    salesCount: 8900,
-    creator: { name: '代码规范师', avatar: '📦', sales: 7200 },
-    coverImage: '📦',
-    isHot: false,
-  },
-  // ChatGPT 文案写作
-  {
-    id: 'chatgpt-video-script',
-    title: '短视频脚本创作',
-    description: '为抖音/B站等平台创作吸引人的短视频脚本',
-    content: `你是一位短视频内容策划专家。请为以下主题创作短视频脚本。
-
-平台：{platform}（抖音/小红书/B站）
-主题：{topic}
-目标受众：{audience}
-时长：{duration}秒
-风格：{style}（搞笑/干货/情感/测评）
-
-请输出完整脚本：
-1. 封面标题和字幕设计
-2. 开场钩子（前3秒）
-3. 正文结构（分镜+字幕+配音）
-4. 互动引导
-5. 背景音乐建议`,
-    platform: 'ChatGPT',
-    category: '文案写作',
-    tags: ['短视频', '脚本', '内容创作'],
+    category: 'AI',
+    subCategory: 'AI',
+    tags: ['Midjourney', '提示词', '图像生成'],
     rating: 4.8,
-    ratingCount: 1567,
-    salesCount: 24500,
-    creator: { name: '短视频达人', avatar: '🎬', sales: 19800 },
-    coverImage: '📹',
+    useCount: 27000,
+    creator: { name: 'AI', avatar: '🤖' },
+    coverImage: '🎨',
     isHot: true,
-  },
-  {
-    id: 'chatgpt-product-desc',
-    title: '电商品台产品描述',
-    description: '生成淘宝/京东/亚马逊等平台的商品详情页文案',
-    content: `你是一位电商文案专家。请为以下产品撰写吸引买家的商品描述。
-
-平台：{platform}（淘宝/京东/亚马逊）
-产品名称：{product_name}
-核心卖点：{key_features}
-目标人群：{target_audience}
-价格带：{price_range}
-
-要求：
-- 主图视频脚本
-- 标题（含关键词，SEO优化）
-- 五点描述（USP形式）
-- 详情页文案
-- 买家秀引导语`,
-    platform: 'ChatGPT',
-    category: '文案写作',
-    tags: ['电商', '产品文案', '转化率优化'],
-    rating: 4.7,
-    ratingCount: 987,
-    salesCount: 15600,
-    creator: { name: '转化率专家', avatar: '🛒', sales: 12800 },
-    coverImage: '🛍️',
-    isHot: false,
-  },
-  {
-    id: 'chatgpt-seo-article',
-    title: 'SEO友好文章',
-    description: '生成既符合搜索引擎又吸引读者的优质内容',
-    content: `你是一位SEO内容专家。请为以下主题撰写一篇SEO友好的文章。
-
-主题：{topic}
-目标关键词：{keywords}
-文章长度：{length}字
-目标读者：{audience}
-发布平台：{platform}
-
-要求：
-- 标题包含主关键词（25-30字）
-- SEO元描述（150-160字）
-- H1主标题 + H2/H3副标题
-- 关键词密度2-3%
-- 包含内部链接占位符
-- 图alt标签建议
-- 结尾CTA设计`,
-    platform: 'ChatGPT',
-    category: '文案写作',
-    tags: ['SEO', '内容营销', '文章写作'],
-    rating: 4.7,
-    ratingCount: 1567,
-    salesCount: 24000,
-    creator: { name: 'SEO专家', avatar: '🔍', sales: 19200 },
-    coverImage: '📝',
-    isHot: true,
-  },
-  {
-    id: 'chatgpt-xiaohongshu',
-    title: '小红书爆款笔记',
-    description: '生成吸引人的小红书文案，包含emoji和热门标签',
-    content: `你是一位资深小红书内容创作者，擅长写爆款笔记。请帮我生成一篇小红书笔记：
-
-产品/主题：{产品/主题}
-目标人群：{人群}
-笔记风格：{真实分享/好物推荐/教程/测评}
-
-要求：
-- 标题：使用【】或emoji开头，吸引眼球
-- 开头：黄金3秒，引发好奇
-- 正文：分段清晰，每段不超过3行，使用emoji
-- 结尾：引导评论/收藏/关注
-- 标签：8-12个相关热门话题标签`,
-    platform: 'ChatGPT',
-    category: '文案写作',
-    tags: ['小红书', '社交媒体', '种草'],
-    rating: 4.9,
-    ratingCount: 2345,
-    salesCount: 38000,
-    creator: { name: '种草达人', avatar: '🌱', sales: 31000 },
-    coverImage: '📕',
-    isHot: true,
+    isUserShared: true,
+    sourceUrl: 'https://github.com/f/awesome-chatgpt-prompts',
   },
   // Claude 编程开发
   {
@@ -438,14 +441,15 @@ Closes #123`,
 5. CI/CD集成建议
 6. 测试覆盖率建议`,
     platform: 'Claude',
-    category: '编程开发',
+    category: 'IT/编程',
+    subCategory: '代码审查',
     tags: ['代码审查', '架构设计', '重构'],
     rating: 4.9,
-    ratingCount: 2341,
-    salesCount: 36000,
-    creator: { name: '架构师老张', avatar: '🏗️', sales: 29000 },
+    useCount: 36000,
+    creator: { name: '架构师老张', avatar: '🏗️' },
     coverImage: '🎯',
     isHot: true,
+    isUserShared: false,
   },
   {
     id: 'claude-tech-docs',
@@ -466,45 +470,17 @@ Closes #123`,
 5. 故障排除指南
 6. 贡献指南`,
     platform: 'Claude',
-    category: '编程开发',
+    category: 'IT/编程',
+    subCategory: '代码审查',
     tags: ['技术文档', 'API文档', 'DevDocs'],
     rating: 4.8,
-    ratingCount: 1234,
-    salesCount: 19800,
-    creator: { name: '文档狂人', avatar: '📚', sales: 16000 },
+    useCount: 19800,
+    creator: { name: '文档狂人', avatar: '📚' },
     coverImage: '📖',
     isHot: false,
+    isUserShared: false,
   },
-  {
-    id: 'claude-data-analysis',
-    title: '数据分析报告',
-    description: '对数据集进行深入分析，生成可操作的数据报告',
-    content: `你是一位数据分析专家。请对以下数据进行分析并生成报告。
-
-数据类型：{data_type}
-数据量级：{data_scale}
-分析目标：{objectives}
-关键指标：{kpis}
-
-请提供：
-1. 数据概览和质量评估
-2. 描述性统计
-3. 趋势分析
-4. 关键发现（3-5点）
-5. 可视化建议
-6. 行动建议
-7. 技术附录（如SQL/Python代码）`,
-    platform: 'Claude',
-    category: '编程开发',
-    tags: ['数据分析', '报告', 'BI'],
-    rating: 4.8,
-    ratingCount: 1876,
-    salesCount: 28500,
-    creator: { name: '数据分析师', avatar: '📈', sales: 22800 },
-    coverImage: '📊',
-    isHot: true,
-  },
-  // Claude 学习教育
+  // 学习教育
   {
     id: 'claude-learning-plan',
     title: '个性化学习计划',
@@ -526,14 +502,44 @@ Closes #123`,
 5. 进度评估方式
 6. 常见瓶颈和突破方法`,
     platform: 'Claude',
-    category: '学习教育',
+    category: '教育/学生',
+    subCategory: '教育/学生',
     tags: ['学习计划', '自我提升', '技能成长'],
     rating: 4.9,
-    ratingCount: 2567,
-    salesCount: 41000,
-    creator: { name: '学习教练', avatar: '🎓', sales: 33000 },
+    useCount: 41000,
+    creator: { name: '学习教练', avatar: '🎓' },
     coverImage: '📚',
     isHot: true,
+    isUserShared: false,
+  },
+  {
+    id: 'gemini-interview-prep',
+    title: '面试题库与模拟',
+    description: '生成针对性的面试题目和答案解析',
+    content: `你是一位技术面试官。请为以下岗位生成面试准备材料。
+
+岗位：{position}
+经验要求：{experience}
+技术栈：{tech_stack}
+公司类型：{company_type}（大厂/创业/外企）
+
+请提供：
+1. 高频面试知识点清单
+2. 模拟面试题（5-10道）
+3. 参考答案要点
+4. 加分回答示例
+5. 面试技巧提示
+6. 该岗位薪资范围参考`,
+    platform: 'Gemini',
+    category: '教育/学生',
+    subCategory: '教育/学生',
+    tags: ['面试', '求职', '职业发展'],
+    rating: 4.9,
+    useCount: 68000,
+    creator: { name: '求职顾问', avatar: '🎯' },
+    coverImage: '💼',
+    isHot: true,
+    isUserShared: false,
   },
   {
     id: 'claude-novel-outline',
@@ -555,14 +561,15 @@ Closes #123`,
 5. 伏笔和悬念设计
 6. 结局设计`,
     platform: 'Claude',
-    category: '学习教育',
+    category: '教育/学生',
+    subCategory: '教育/学生',
     tags: ['小说创作', '故事结构', '写作技巧'],
     rating: 4.7,
-    ratingCount: 876,
-    salesCount: 13500,
-    creator: { name: '故事匠人', avatar: '✍️', sales: 11200 },
+    useCount: 13500,
+    creator: { name: '故事匠人', avatar: '✍️' },
     coverImage: '📜',
     isHot: false,
+    isUserShared: false,
   },
   // Midjourney AI绘画
   {
@@ -571,29 +578,31 @@ Closes #123`,
     description: '生成具有电影质感的震撼风景照片',
     content: `/imagine prompt: {scene_description}, cinematic landscape photography, dramatic lighting, golden hour, ultra-detailed, 8K resolution, National Geographic style, shot on Canon EOS R5, 24mm lens, f/8 aperture, shallow depth of field, rich colors, --ar 16:9 --style raw --v 6.1`,
     platform: 'Midjourney',
-    category: 'AI绘画',
+    category: 'AI',
+    subCategory: 'AI',
     tags: ['风景', '摄影', '电影感'],
     rating: 4.8,
-    ratingCount: 4567,
-    salesCount: 68000,
-    creator: { name: '光影大师', avatar: '🌅', sales: 54000 },
+    useCount: 68000,
+    creator: { name: '光影大师', avatar: '🌅' },
     coverImage: '🏔️',
     isHot: true,
+    isUserShared: false,
   },
   {
     id: 'mj-portrait-pro',
     title: '商业人像摄影',
-    description: '专业级商业人像，适用广告和品牌视觉',
+    description: '专业级商业人像，适用于广告和品牌视觉',
     content: `/imagine prompt: {subject} portrait, professional commercial photography, studio lighting setup, beauty dish, softbox, 85mm lens, fashion magazine cover style, retouched skin, detailed eyes, 4K --ar 3:4 --style raw --v 6.1`,
     platform: 'Midjourney',
-    category: 'AI绘画',
+    category: 'AI',
+    subCategory: 'AI',
     tags: ['人像', '商业摄影', '时尚'],
     rating: 4.7,
-    ratingCount: 3456,
-    salesCount: 52000,
-    creator: { name: '摄影大师', avatar: '📷', sales: 42000 },
+    useCount: 52000,
+    creator: { name: '摄影大师', avatar: '📷' },
     coverImage: '👤',
     isHot: true,
+    isUserShared: false,
   },
   {
     id: 'mj-product-shot',
@@ -601,14 +610,15 @@ Closes #123`,
     description: '电商级产品主图，呈现高端质感',
     content: `/imagine prompt: {product_name} on minimalist {surface_type} surface, professional product photography, soft neutral background, studio lighting, high-end brand aesthetic, clean composition, 45-degree angle, 8K detail, white background option --ar 1:1 --style raw --v 6.1`,
     platform: 'Midjourney',
-    category: 'AI绘画',
+    category: 'AI',
+    subCategory: 'AI',
     tags: ['产品摄影', '电商', '商业'],
     rating: 4.9,
-    ratingCount: 5234,
-    salesCount: 79000,
-    creator: { name: '产品摄影师', avatar: '✨', sales: 63000 },
+    useCount: 79000,
+    creator: { name: '产品摄影师', avatar: '✨' },
     coverImage: '💎',
     isHot: true,
+    isUserShared: false,
   },
   {
     id: 'mj-food-photography',
@@ -616,29 +626,15 @@ Closes #123`,
     description: '让人垂涎欲滴的美食照片，适用于菜单和社交媒体',
     content: `/imagine prompt: {food_description}, professional food photography, top-down angle, natural lighting, shallow depth of field, 50mm lens, food styling, steam rising, vibrant colors, clean background, 8K resolution, --ar 1:1 --style raw --v 6.1`,
     platform: 'Midjourney',
-    category: 'AI绘画',
+    category: 'AI',
+    subCategory: 'AI',
     tags: ['美食', '摄影', '餐饮'],
     rating: 4.6,
-    ratingCount: 1876,
-    salesCount: 28000,
-    creator: { name: '美食摄影师', avatar: '🍜', sales: 22500 },
+    useCount: 28000,
+    creator: { name: '美食摄影师', avatar: '🍜' },
     coverImage: '🍽️',
     isHot: false,
-  },
-  {
-    id: 'mj-architecture',
-    title: '建筑设计',
-    description: '生成具有创意和功能性的建筑设计方案',
-    content: `/imagine prompt: {building_type} architecture, {style} style, {material} exterior, sustainable design, natural lighting, interior view, architectural magazine spread, clean lines, 8K, photorealistic, --ar 16:9 --style raw --v 6.1`,
-    platform: 'Midjourney',
-    category: 'AI绘画',
-    tags: ['建筑', '设计', '室内'],
-    rating: 4.7,
-    ratingCount: 1876,
-    salesCount: 28500,
-    creator: { name: '建筑设计师', avatar: '🏛️', sales: 23000 },
-    coverImage: '🏛️',
-    isHot: false,
+    isUserShared: false,
   },
   // Stable Diffusion AI绘画
   {
@@ -647,14 +643,15 @@ Closes #123`,
     description: '生成高质量动漫角色立绘，适合游戏原画和IP设计',
     content: `masterpiece, best quality, {character_description}, anime style, detailed face, beautiful eyes, shiny hair, dynamic pose, white background, full body, official art, sharp focus, intricate details, {style} --w 512 --h 768 --steps 30 --cfg 7.5 --seed -1`,
     platform: 'Stable Diffusion',
-    category: 'AI绘画',
+    category: 'AI',
+    subCategory: 'AI',
     tags: ['动漫', '角色设计', '游戏'],
     rating: 4.7,
-    ratingCount: 3456,
-    salesCount: 52000,
-    creator: { name: '动漫艺术家', avatar: '🎨', sales: 42000 },
+    useCount: 52000,
+    creator: { name: '动漫艺术家', avatar: '🎨' },
     coverImage: '🎭',
     isHot: true,
+    isUserShared: false,
   },
   {
     id: 'sd-game-asset',
@@ -662,14 +659,15 @@ Closes #123`,
     description: '生成游戏道具、装备、场景等资产概念图',
     content: `game asset design, {asset_type}, isometric view, clean lines, {style} style, transparent PNG, white background, high contrast, detailed texture, 4K resolution, game engine ready, {additional_details} --w 512 --h 512 --steps 25 --cfg 8 --seed -1`,
     platform: 'Stable Diffusion',
-    category: 'AI绘画',
+    category: 'AI',
+    subCategory: 'AI',
     tags: ['游戏', '资产设计', '概念图'],
     rating: 4.5,
-    ratingCount: 876,
-    salesCount: 13500,
-    creator: { name: '游戏美术师', avatar: '🎮', sales: 11200 },
+    useCount: 13500,
+    creator: { name: '游戏美术师', avatar: '🎮' },
     coverImage: '🕹️',
     isHot: false,
+    isUserShared: false,
   },
   // DALL-E AI绘画
   {
@@ -683,14 +681,15 @@ Closes #123`,
 - Evocative lighting and color grading
 - Professional concept art quality suitable for film or game pre-visualization`,
     platform: 'DALL-E',
-    category: 'AI绘画',
+    category: 'AI',
+    subCategory: 'AI',
     tags: ['概念艺术', '插画', '设计'],
     rating: 4.8,
-    ratingCount: 1234,
-    salesCount: 19200,
-    creator: { name: '概念艺术家', avatar: '🖼️', sales: 15600 },
+    useCount: 19200,
+    creator: { name: '概念艺术家', avatar: '🖼️' },
     coverImage: '🎨',
     isHot: false,
+    isUserShared: false,
   },
   {
     id: 'dalle-infographic',
@@ -704,14 +703,15 @@ Closes #123`,
 - Hierarchical information architecture
 - Suitable for presentations and reports`,
     platform: 'DALL-E',
-    category: 'AI绘画',
+    category: 'AI',
+    subCategory: 'AI',
     tags: ['信息图', '数据可视化', '设计'],
     rating: 4.6,
-    ratingCount: 678,
-    salesCount: 10500,
-    creator: { name: '数据设计师', avatar: '📊', sales: 8800 },
+    useCount: 10500,
+    creator: { name: '数据设计师', avatar: '📊' },
     coverImage: '📊',
     isHot: false,
+    isUserShared: false,
   },
   // Gemini 编程开发
   {
@@ -736,42 +736,15 @@ Closes #123`,
 
 适合教学风格，循序渐进。`,
     platform: 'Gemini',
-    category: '编程开发',
+    category: 'IT/编程',
+    subCategory: '代码审查',
     tags: ['代码解释', '教学', '学习'],
     rating: 4.9,
-    ratingCount: 3456,
-    salesCount: 52000,
-    creator: { name: '编程导师', avatar: '💻', sales: 42000 },
+    useCount: 52000,
+    creator: { name: '编程导师', avatar: '💻' },
     coverImage: '📘',
     isHot: true,
-  },
-  {
-    id: 'gemini-interview-prep',
-    title: '面试题库与模拟',
-    description: '生成针对性的面试题目和答案解析',
-    content: `你是一位技术面试官。请为以下岗位生成面试准备材料。
-
-岗位：{position}
-经验要求：{experience}
-技术栈：{tech_stack}
-公司类型：{company_type}（大厂/创业/外企）
-
-请提供：
-1. 高频面试知识点清单
-2. 模拟面试题（5-10道）
-3. 参考答案要点
-4. 加分回答示例
-5. 面试技巧提示
-6. 该岗位薪资范围参考`,
-    platform: 'Gemini',
-    category: '学习教育',
-    tags: ['面试', '求职', '职业发展'],
-    rating: 4.9,
-    ratingCount: 4567,
-    salesCount: 68000,
-    creator: { name: '求职顾问', avatar: '🎯', sales: 54000 },
-    coverImage: '💼',
-    isHot: true,
+    isUserShared: false,
   },
   // ChatGPT 生活
   {
@@ -795,14 +768,15 @@ Closes #123`,
 4. 预算分配表
 5. 注意事项和省钱技巧`,
     platform: 'ChatGPT',
-    category: '生活百科',
+    category: '生活质量',
+    subCategory: '生活质量',
     tags: ['旅行', '规划', '生活'],
     rating: 4.7,
-    ratingCount: 2134,
-    salesCount: 32000,
-    creator: { name: '旅行达人', avatar: '✈️', sales: 25800 },
+    useCount: 32000,
+    creator: { name: '旅行达人', avatar: '✈️' },
     coverImage: '🗺️',
     isHot: false,
+    isUserShared: false,
   },
   {
     id: 'chatgpt-fitness-plan',
@@ -825,14 +799,15 @@ Closes #123`,
 4. 常见问题解答
 5. 注意事项`,
     platform: 'ChatGPT',
-    category: '生活百科',
+    category: '生活质量',
+    subCategory: '生活质量',
     tags: ['健身', '健康', '塑性'],
     rating: 4.8,
-    ratingCount: 2567,
-    salesCount: 38500,
-    creator: { name: '健身教练', avatar: '🏋️', sales: 31000 },
+    useCount: 38500,
+    creator: { name: '健身教练', avatar: '🏋️' },
     coverImage: '💪',
     isHot: false,
+    isUserShared: false,
   },
   {
     id: 'chatgpt-recipe',
@@ -854,33 +829,88 @@ Closes #123`,
 5. 营养信息（热量/蛋白质/碳水）
 6. 搭配建议`,
     platform: 'ChatGPT',
-    category: '生活百科',
+    category: '生活质量',
+    subCategory: '生活质量',
     tags: ['食谱', '烹饪', '美食'],
     rating: 4.6,
-    ratingCount: 1234,
-    salesCount: 18500,
-    creator: { name: '美食达人', avatar: '🍳', sales: 14800 },
+    useCount: 18500,
+    creator: { name: '美食达人', avatar: '🍳' },
     coverImage: '🍳',
     isHot: false,
+    isUserShared: false,
+  },
+  // 语言/翻译
+  {
+    id: 'chatgpt-english-translator',
+    title: '英语翻译/修改',
+    description: '将其他语言翻译成英文，或改进你提供的英文句子',
+    content: `I want you to act as an English translator, spelling corrector and improver. I will speak to you in any language and you will detect the language, translate it and answer in the corrected and improved version of my text, in English. I want you to replace my simplified A0-level words and sentences with more beautiful and elegant, upper level English words and sentences. Keep the meaning same, but make them more literary. I want you to only reply the correction, the improvements and nothing else, do not write explanations. My first sentence is "要翻译或修改的内容"`,
+    platform: 'ChatGPT',
+    category: '语言/翻译',
+    subCategory: '语言/翻译',
+    tags: ['翻译', '英语', '润色'],
+    rating: 4.9,
+    useCount: 21000,
+    creator: { name: 'AI', avatar: '🤖' },
+    coverImage: '🌐',
+    isHot: false,
+    isUserShared: true,
+    sourceUrl: 'https://github.com/f/awesome-chatgpt-prompts',
+  },
+]
+
+// Categories with subCategories
+export const categories = [
+  { 
+    key: 'all', 
+    name: '所有提示词',
+    count: prompts.length,
+    subCategories: []
+  },
+  { 
+    key: '写作辅助', 
+    name: '写作辅助',
+    subCategories: ['文章/报告', '社交媒体', '演示', '邮件']
+  },
+  { 
+    key: 'IT/编程', 
+    name: 'IT/编程',
+    subCategories: ['代码审查']
+  },
+  { 
+    key: 'AI', 
+    name: 'AI',
+    subCategories: ['AI']
+  },
+  { 
+    key: '生活质量', 
+    name: '生活质量',
+    subCategories: ['生活质量']
+  },
+  { 
+    key: '教育/学生', 
+    name: '教育/学生',
+    subCategories: ['教育/学生']
+  },
+  { 
+    key: '语言/翻译', 
+    name: '语言/翻译',
+    subCategories: ['语言/翻译']
   },
 ]
 
 export const platforms = [
-  { key: 'all', name: '全部' },
-  { key: 'ChatGPT', name: 'ChatGPT' },
-  { key: 'Claude', name: 'Claude' },
-  { key: 'Midjourney', name: 'Midjourney' },
-  { key: 'Stable Diffusion', name: 'Stable Diffusion' },
-  { key: 'DALL-E', name: 'DALL-E' },
-  { key: 'Gemini', name: 'Gemini' },
+  { key: 'all', name: '全部', count: prompts.length },
+  { key: 'ChatGPT', name: 'ChatGPT', count: prompts.filter(p => p.platform === 'ChatGPT').length },
+  { key: 'Claude', name: 'Claude', count: prompts.filter(p => p.platform === 'Claude').length },
+  { key: 'Midjourney', name: 'Midjourney', count: prompts.filter(p => p.platform === 'Midjourney').length },
+  { key: 'Stable Diffusion', name: 'Stable Diffusion', count: prompts.filter(p => p.platform === 'Stable Diffusion').length },
+  { key: 'DALL-E', name: 'DALL-E', count: prompts.filter(p => p.platform === 'DALL-E').length },
+  { key: 'Gemini', name: 'Gemini', count: prompts.filter(p => p.platform === 'Gemini').length },
 ]
 
-export const categories = [
-  { key: 'all', name: '全部分类' },
-  { key: '职场办公', name: '职场办公' },
-  { key: '编程开发', name: '编程开发' },
-  { key: 'AI绘画', name: 'AI绘画' },
-  { key: '文案写作', name: '文案写作' },
-  { key: '学习教育', name: '学习教育' },
-  { key: '生活百科', name: '生活百科' },
+export const sortOptions = [
+  { key: 'popular', name: '收藏最多' },
+  { key: 'newest', name: '最新' },
+  { key: 'useCount', name: '使用最多' },
 ]
