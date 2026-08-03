@@ -6,7 +6,7 @@
 [![Fork](https://img.shields.io/github/forks/Answer-version/prompt-market?style=social)](https://github.com/Answer-version/prompt-market/network/members)
 [![License](https://img.shields.io/github/license/Answer-version/prompt-market)](https://github.com/Answer-version/prompt-market/blob/main/LICENSE)
 
-**[🌐 在线访问](https://prompt-market.us.ci)** · **[📖 查看文档](./docs/README_zh.md)**
+**[📖 查看文档](./docs/README_zh.md)** · **[🚀 本地运行](#-快速开始)**
 
 ---
 

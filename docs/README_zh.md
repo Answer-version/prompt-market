@@ -36,7 +36,7 @@ PromptHub 是一个免费的 AI 提示词模板市场，收录了来自 ChatGPT�
 
 ## 📱 如何访问？
 
-**在线访问**: https://prompt-market.us.ci
+**本地运行**: 见 [README 快速开始](../README.md#-快速开始)
 
 支持所有现代浏览器，手机、电脑、平板都能流畅访问。
 
